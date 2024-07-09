@@ -17,3 +17,15 @@ Project structure:
 └── README.md
 ```
 
+# PROJECT 2 : Python/Flask application using a Redis database 
+
+Project structure:
+
+```
+.
+├── Dockerfile
+├── README.md
+├── app.py
+├── compose.yaml
+└── requirements.txt
+```

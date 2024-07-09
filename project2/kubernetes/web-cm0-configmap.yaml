@@ -1,0 +1,73 @@
+apiVersion: v1
+data:
+  Dockerfile: |
+    # syntax=docker/dockerfile:1.4
+    FROM --platform=$BUILDPLATFORM python:3.10-alpine AS builder
+
+    WORKDIR /code
+
+    COPY requirements.txt /code
+    RUN --mount=type=cache,target=/root/.cache/pip \
+        pip3 install -r requirements.txt
+
+    COPY . /code
+
+    ENTRYPOINT ["python3"]
+    CMD ["app.py"]
+
+    FROM builder as dev-envs
+
+    RUN <<EOF
+    apk update
+    apk add git bash
+    EOF
+
+    RUN <<EOF
+    addgroup -S docker
+    adduser -S --shell /bin/bash --ingroup docker vscode
+    EOF
+    # install Docker tools (cli, buildx, compose)
+    COPY --from=gloursdocker/docker / /
+  README.md: "## Compose sample application\n\n### Use with Docker Development Environments\n\nYou can open this sample in the Dev Environments feature of Docker Desktop version 4.12 or later.\n\n[Open in Docker Dev Environments <img src=\"../open_in_new.svg\" alt=\"Open in Docker Dev Environments\" align=\"top\"/>](https://open.docker.com/dashboard/dev-envs?url=https://github.com/docker/awesome-compose/tree/master/flask-redis)\n\n### Python/Flask application using a Redis database\n\nProject structure:\n\n```\n.\n├── Dockerfile\n├── README.md\n├── app.py\n├── compose.yaml\n└── requirements.txt\n```\n\n[_compose.yaml_](compose.yaml)\n\n```\nservices:\n   redis: \n     image: redislabs/redismod\n     ports:\n       - '6379:6379' \n   web:\n        build: .\n        ports:\n            - \"8000:8000\"\n        volumes:\n            - .:/code\n        depends_on:\n            - redis\n```\n\n## Deploy with docker compose\n\n```\n$ docker compose up -d\n[+] Running 24/24\n ⠿ redis Pulled   \n ...                                                                                                                                                                                                                                                                                                                                                                                                             \n   ⠿ 565225d89260 Pull complete                                                                                                                                                                                                      \n[+] Building 12.7s (10/10) FINISHED\n => [internal] load build definition from Dockerfile                                                                                                                                                                                  ...\n[+] Running 3/3\n ⠿ Network flask-redis_default    Created                                                                                                                                                                                             \n ⠿ Container flask-redis-redis-1  Started                                                                                                                                                                                             \n ⠿ Container flask-redis-web-1    Started\n```\n\n## Expected result\n\nListing containers must show one container running and the port mapping as below:\n```\n\n$ docker compose ps\nNAME                  COMMAND                  SERVICE             STATUS              PORTS\nflask-redis-redis-1   \"redis-server --load…\"   redis               running             0.0.0.0:6379->6379/tcp\nflask-redis-web-1     \"/bin/sh -c 'python …\"   web                 running             0.0.0.0:8000->8000/tcp\n```\n\nAfter the application starts, navigate to `http://localhost:8000` in your web browser or run:\n```\n$ curl localhost:8000\nThis webpage has been viewed 2 time(s)\n```\n\n## Monitoring Redis keys\n\nConnect to redis database by using ```redis-cli``` command and monitor the keys.\n```\nredis-cli -p 6379\n127.0.0.1:6379> monitor\nOK\n1646634062.732496 [0 172.21.0.3:33106] \"INCRBY\" \"hits\" \"1\"\n1646634062.735669 [0 172.21.0.3:33106] \"GET\" \"hits\"\n```\n\n\nStop and remove the containers\n```\n$ docker compose down\n```\n"
+  app.py: |
+    from flask import Flask
+    from redis import Redis
+
+    app = Flask(__name__)
+    redis = Redis(host='redis', port=6379)
+
+    @app.route('/')
+    def hello():
+        redis.incr('hits')
+        counter = str(redis.get('hits'),'utf-8')
+        return "This webpage has been viewed "+counter+" time(s)"
+
+    if __name__ == "__main__":
+        app.run(host="0.0.0.0", port=8000, debug=True)
+  compose.yaml: |
+    services:
+      redis:
+        image: redislabs/redismod
+        ports:
+          - '6379:6379'
+      web:
+        build:
+          context: .
+          target: builder
+        # flask requires SIGINT to stop gracefully
+        # (default stop signal from Compose is SIGTERM)
+        stop_signal: SIGINT
+        ports:
+          - '8000:8000'
+        volumes:
+          - .:/code
+        depends_on:
+          - redis
+  requirements.txt: |
+    flask
+    redis
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: web
+  name: web-cm0
