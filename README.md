@@ -29,3 +29,17 @@ Project structure:
 ├── compose.yaml
 └── requirements.txt
 ```
+
+# PROJECT 3 : Weather Application using React and Openweather API
+
+Project structure:
+
+```
+.
+├── public
+├── src
+├── Dockerfile
+├── package-lock.json
+├── package.json
+└── README.md
+```

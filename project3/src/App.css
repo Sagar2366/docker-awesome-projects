@@ -1,0 +1,82 @@
+@import url("https://fonts.googleapis.com/css2?family=Unbounded&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Unbounded", cursive;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.bg_img {
+  width: 100%;
+  min-height: 100vh;
+  background: url(images/bg.jpg) no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: rgb(237, 42, 42);
+}
+
+.input {
+  background-color: rgba(8, 8, 8, 0);
+}
+
+.group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.city {
+  margin-top: 2rem;
+}
+
+.city,
+.temp {
+  font-size: 3rem;
+}
+
+.box_container {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+}
+
+.box {
+  padding: 1rem;
+  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.75);
+  width: 220px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.2s;
+}
+
+.box:hover {
+  transform: scale(1.1);
+}
+
+@media only screen and (max-width: 730px) {
+  .bg_img {
+    padding: 2rem 0;
+  }
+
+  .box_container {
+    flex-direction: column;
+  }
+
+  .box,
+  .input {
+    width: 70vw;
+  }
+}
