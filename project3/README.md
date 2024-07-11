@@ -25,5 +25,7 @@ $ docker rmi -f weather
 $ docker images | grep -i weather
 $ docker load -i weather.tar
 $ docker images | grep -i weather
-Output:
+```
+
+# Output:
 ![Output](./output.png)
