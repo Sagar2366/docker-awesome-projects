@@ -36,4 +36,5 @@ jobs:
           context: "https://github.com/Sagar2366/docker-awesome-projects.git#main:project3"
           push: true
           annotations: ${{ steps.meta.outputs.annotations }}
+          provenance: mode=max
           tags: ${{ vars.DOCKERHUB_USERNAME }}/dockerweather:${{ steps.meta.outputs.tags }}
