@@ -31,7 +31,7 @@ jobs:
       
       - name: Test
         run: |
-          docker run --itd --rm dockerweather:test
+          docker run -itd --rm dockerweather:test
 
       - name: Docker Scout
         id: docker-scout
