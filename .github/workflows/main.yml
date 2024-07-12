@@ -38,6 +38,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: "https://github.com/Sagar2366/docker-awesome-projects.git#main:project3"
+          file: Dockerfile
           load: true
           tags: weatherapp:testimage
       
