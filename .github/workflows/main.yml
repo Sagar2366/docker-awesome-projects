@@ -31,15 +31,6 @@ jobs:
       - name: Test
         run: |
           docker run --itd --rm dockerweather:test
-          
-      -
-        name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: "https://github.com/Sagar2366/docker-awesome-projects.git#main:project3"
-          push: true
-          provenance: mode=max
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/dockerweather:prod
 
       - name: Docker Scout
         id: docker-scout
@@ -50,6 +41,15 @@ jobs:
           ignore-base: true
           ignore-unchanged: true
           only-fixed: true
+          
+      -
+        name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: "https://github.com/Sagar2366/docker-awesome-projects.git#main:project3"
+          push: true
+          provenance: mode=max
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/dockerweather:prod
           
       - 
         name: Login to GitHub Container Registry
