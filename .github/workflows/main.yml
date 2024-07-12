@@ -7,9 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./project3
     steps:
       -
         name: Login to Docker Hub
@@ -24,7 +21,6 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./project3
-          file: project3/Dockerfile
+          context: /project3
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/dockerawesome-weather:latest
