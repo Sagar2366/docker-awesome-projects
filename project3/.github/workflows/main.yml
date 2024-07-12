@@ -4,10 +4,14 @@ on:
   push:
     branches:
       - "main"
-
+    paths:
+      - "project3/**"
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: project3
     steps:
       -
         name: Login to Docker Hub
