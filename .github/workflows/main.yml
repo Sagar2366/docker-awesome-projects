@@ -25,5 +25,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./project3
+          file: project3/Dockerfile
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/dockerawesome-weather:latest
