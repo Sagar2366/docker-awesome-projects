@@ -24,27 +24,6 @@ jobs:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
-      - 
-        name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.IMAGE_NAME }}
-        env:
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
-
-      - name: Build and export to Docker
-        uses: docker/build-push-action@v6
-        with:
-          context: "https://github.com/Sagar2366/docker-awesome-projects.git#main:project3"
-          file: Dockerfile
-          load: true
-          tags: weatherapp:testimage
-      
-      - name: Test
-        run: |
-          docker run --rm weatherapp:testimage
 
       - name: Docker Scout
         id: docker-scout
@@ -61,7 +40,6 @@ jobs:
         with:
           context: "https://github.com/Sagar2366/docker-awesome-projects.git#main:project3"
           push: true
-          annotations: ${{ steps.meta.outputs.annotations }}
           provenance: mode=max
           tags: ${{ vars.DOCKERHUB_USERNAME }}/dockerweather:${{ steps.meta.outputs.tags }}
           
