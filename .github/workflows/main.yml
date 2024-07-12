@@ -26,6 +26,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           load: true
+          context: "https://github.com/Sagar2366/docker-awesome-projects.git#main:project3"
           tags: dockerweather:test
       
       - name: Test
