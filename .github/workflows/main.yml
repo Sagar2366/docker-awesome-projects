@@ -37,8 +37,7 @@ jobs:
         id: docker-scout
         uses: docker/scout-action@v1
         with:
-          command: cves,recommendations,compare
-          to-latest: true
+          command: cves,recommendations
           ignore-base: true
           ignore-unchanged: true
           only-fixed: true
