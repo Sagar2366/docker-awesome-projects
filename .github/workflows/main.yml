@@ -24,6 +24,6 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: "{{defaultContext}}:project3"
+          context: "https://github.com/Sagar2366/docker-awesome-projects.git#main:project3"
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/dockerweather:latest
